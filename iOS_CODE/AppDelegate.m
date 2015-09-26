@@ -1,0 +1,165 @@
+//
+//  AppDelegate.m
+//  openGL_startup
+//
+//  Created by marc  dion on 13-05-19.
+//  Copyright (c) 2013 __MyCompanyName__. All rights reserved.
+//
+
+#import "AppDelegate.h"
+
+#import "ViewController.h"
+
+@implementation AppDelegate
+
+@synthesize window = _window;
+@synthesize viewController = _viewController;
+
+GLfloat sphere_POSITION[3];
+
+
+
+- (void)dealloc
+{
+        [_window release];
+        [_viewController release];
+        [super dealloc];
+}
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+        self.window = [[[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]] autorelease];
+        
+        self.window.multipleTouchEnabled   = YES;
+        self.window.userInteractionEnabled = YES;  
+        
+        
+        //=======================================================================================================================================
+        
+        //---------------------------------------------------------------------------------------------------------------------------------------
+        UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panDetected:)];
+        [_window addGestureRecognizer:panRecognizer];
+        //----------------------------------------------------===================================================================================
+/*        UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapDetected:)];
+        tapRecognizer.numberOfTapsRequired = 1;
+        [_window addGestureRecognizer:tapRecognizer];     
+        //----------------------------------------
+        UITapGestureRecognizer *doubleTapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(doubleTapDetected:)];
+        doubleTapRecognizer.numberOfTapsRequired = 2;
+        [_window addGestureRecognizer:doubleTapRecognizer];        
+*/        //----------------------------------------------------=================================================================================  
+        UIPinchGestureRecognizer *pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchDetected:)];
+        [_window addGestureRecognizer:pinchRecognizer];    
+        //---------------------------------------------------------------------------------------------------------------------------------------    
+        
+        //=======================================================================================================================================      
+        
+        if ([[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPhone) 
+        {
+            self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController_iPhone" bundle:nil] autorelease];
+        } 
+        else 
+        {
+            self.viewController = [[[ViewController alloc] initWithNibName:@"ViewController_iPad" bundle:nil] autorelease];
+        }
+       
+        self.window.rootViewController = self.viewController;
+        [self.window makeKeyAndVisible];
+        return YES;
+}
+
+
+
+
+//===================================================================================================================================================================
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//===================================================================================================================================================================
+/*
+
+- (void)doubleTapDetected:(UITapGestureRecognizer *)doubleTapRecognizer
+{
+        
+        
+        //breakAnimation = true;
+}   
+
+//===================================================================================================================================================================
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//===================================================================================================================================================================
+- (void)tapDetected:(UITapGestureRecognizer *)tapRecognizer
+{
+        
+        
+        
+}
+*/
+//===================================================================================================================================================================
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//===================================================================================================================================================================
+
+- (void)panDetected:(UIPanGestureRecognizer *)panRecognizer
+{
+        CGPoint  locationOnScreen = [panRecognizer velocityInView: _window];  
+        
+        sphere_POSITION[0] -=  locationOnScreen.y * 0.0005;
+        sphere_POSITION[1] -=  locationOnScreen.x * 0.0005 ;        
+}
+
+//===================================================================================================================================================================
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//===================================================================================================================================================================
+- (void)pinchDetected:(UIPinchGestureRecognizer *)pinchRecognizer
+{
+        //=========================================================================================
+        CGFloat scale = pinchRecognizer.scale;
+        //self->view.transform = CGAffineTransformScale(self->view.transform, scale, scale);
+        pinchRecognizer.scale = 1.0;
+        //=========================================================================================
+        sphere_POSITION[2] /= scale;   
+        
+        //NSLog(@"eyePosition[2]: %f", eyePosition[2]);   
+}
+
+//===================================================================================================================================================================
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//===================================================================================================================================================================
+
+
+- (void)applicationWillResignActive:(UIApplication *)application
+{
+        // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
+        // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+}
+
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+        // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
+        // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
+        // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application
+{
+        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+}
+
+- (void)applicationWillTerminate:(UIApplication *)application
+{
+        // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+@end
